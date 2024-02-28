@@ -3,15 +3,20 @@ package com.example.library.model;
 
 public class Book {
 
-    private Long bookId;
+    private Integer bookId;
     private String title;
     private String author;
     private String isbn;
     private double price;
     private String genre;
 
+    private int year_published;
+
+    private int quantity;
+
+
     // Constructor
-    public Book(Long bookId, String title, String author, String isbn, double price, String genre) {
+    public Book(Integer bookId, String title, String author, String isbn, double price, String genre) {
         this.bookId = bookId;
         this.title = title;
         this.author = author;
@@ -21,11 +26,11 @@ public class Book {
     }
 
     // Getters and setters
-    public Long getBookId() {
+    public Integer getBookId() {
         return bookId;
     }
 
-    public void setBookId(Long bookId) {
+    public void setBookId(Integer bookId) {
         this.bookId = bookId;
     }
 
@@ -67,6 +72,21 @@ public class Book {
 
     public void setGenre(String genre) {
         this.genre = genre;
+    }
+    public Integer getYear_published() {
+        return year_published;
+    }
+
+    public void setYear_published(Integer year_published) {
+        this.year_published = year_published;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
     }
 
 }

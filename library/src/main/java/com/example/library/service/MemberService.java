@@ -1,38 +1,46 @@
 package com.example.library.service;
-
+import com.example.library.entity.LibraryMember;
 import com.example.library.model.Member;
+import com.example.library.repository.LibraryMemberRepository;
+import jakarta.persistence.PersistenceContext;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 @Service
 public class MemberService {
 
-    private Map<Long, Member> memberMap = new HashMap<>();
 
-    public Member createMember(Member member){
-        // Call the database or perform any necessary operations
-        Long memberId = new Random().nextLong();
+    @Autowired
+    private LibraryMemberRepository memberRepository;
+
+    public LibraryMember createMember(LibraryMember member){
+
+        // call the database
+        Integer memberId = new Random().nextInt();
         member.setMemberId(memberId);
-        memberMap.put(memberId, member);
-        return member;
+
+        return memberRepository.save(member);
     }
 
-    public Member getMember(Long memberId) {
-        // Retrieve member from the map (simulating database access)
-        return memberMap.get(memberId);
-    }
+    public LibraryMember getMember(Integer memberId) {
 
-    public Member updateMember(Long memberId, Member member) {
-        // Update member in the map (simulating database access)
-        memberMap.put(memberId, member);
-        return member;
-    }
+        Optional<LibraryMember> memberOptional =
+                memberRepository.findById(memberId);
+        return  memberOptional.orElse(new LibraryMember());
 
-    public void deleteMember(Long memberId) {
-        // Delete member from the map (simulating database access)
-        memberMap.remove(memberId);
+    }
+    public LibraryMember updateMember(Integer memberId,LibraryMember member){
+
+        // call the database
+        member.setMemberId(memberId);
+
+        return memberRepository.save(member);
+    }
+    public void deleteMember(Integer memberId) {
+        // Delete a member by ID using Spring Data JDBC repository
+        memberRepository.deleteById(memberId);
+        // Alternatively, you can perform additional logic after deletion if needed
     }
 }

@@ -1,48 +1,49 @@
 package com.example.library.service;
 
-// BookService.java
-import com.example.library.model.Book;
+
+import com.example.library.entity.Book;
+import com.example.library.repository.BookRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+
+import java.util.Optional;
+import java.util.Random;
 
 @Service
 public class BookService {
 
-    private List<Book> books = new ArrayList<>();
+    @Autowired
+    private BookRepository bookRepository;
 
-    public List<Book> getAllBooks() {
-        return books;
+    public Book updateBook(Integer bookId, Book updatedBook) {
+        Optional<Book> existingBookOptional = bookRepository.findById(bookId);
+
+        if (existingBookOptional.isPresent()) {
+            Book existingBook = existingBookOptional.get();
+            existingBook.setTitle(updatedBook.getTitle());
+            existingBook.setAuthor(updatedBook.getAuthor());
+            existingBook.setYear_published(updatedBook.getYear_published());
+            // existingBook.setisbn(updatedBook.getIsbn());
+            return bookRepository.save(existingBook);
+        } else {
+            return null;
+        }
     }
 
-    public Book getBookById(Long bookId) {
-        for (Book book : books) {
-            if (book.getBookId().equals(bookId)) {
-                return book;
-            }
-        }
-        return null; // or throw exception
+    public void deleteBook(Integer bookId) {
+        bookRepository.deleteById(bookId);
     }
 
     public Book createBook(Book book) {
-        books.add(book);
-        return book;
+
+        Integer bookId = new Random().nextInt();
+        book.setBookId(bookId);
+        return bookRepository.save(book);
     }
 
-    public Book updateBook(Long bookId, Book updatedBook) {
-        for (Book book : books) {
-            if (book.getBookId().equals(bookId)) {
-                book.setTitle(updatedBook.getTitle());
-                book.setAuthor(updatedBook.getAuthor());
-                // Set other properties as needed
-                return book;
-            }
-        }
-        return null; // or throw exception
-    }
-
-    public void deleteBook(Long bookId) {
-        books.removeIf(book -> book.getBookId().equals(bookId));
+    public Book getBook(Integer bookId) {
+        Optional<Book> bookOptional = bookRepository.findById(bookId);
+        return bookOptional.orElse(new Book());
     }
 }
