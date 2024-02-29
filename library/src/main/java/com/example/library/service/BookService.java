@@ -1,49 +1,70 @@
 package com.example.library.service;
 
-
-import com.example.library.entity.Book;
-import com.example.library.repository.BookRepository;
+import com.example.library.entity.LibraryBook;
+import com.example.library.model.Book;
+import com.example.library.model.BookIsbnDTO;
+import com.example.library.model.CheckoutDTO;
+import com.example.library.repository.LibraryBookRepository;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 @Service
 public class BookService {
-
+    //private Map<Long, Book> bookMap = new HashMap<>();
     @Autowired
-    private BookRepository bookRepository;
+    private LibraryBookRepository bookRepository;
+    public LibraryBook createBook(LibraryBook book){
 
-    public Book updateBook(Integer bookId, Book updatedBook) {
-        Optional<Book> existingBookOptional = bookRepository.findById(bookId);
+        // call the database
+        //Integer bookId = new Random().nextInt();
+        //book.setBookId(bookId);
+        //bookMap.put(bookId, book);
+        return  bookRepository.save(book);
+    }
 
-        if (existingBookOptional.isPresent()) {
-            Book existingBook = existingBookOptional.get();
-            existingBook.setTitle(updatedBook.getTitle());
-            existingBook.setAuthor(updatedBook.getAuthor());
-            existingBook.setYear_published(updatedBook.getYear_published());
-            // existingBook.setisbn(updatedBook.getIsbn());
-            return bookRepository.save(existingBook);
-        } else {
-            return null;
-        }
+    public Book getBook(Integer bookId) {
+        Optional<LibraryBook> bookOptional =
+                bookRepository.findById(bookId);
+        LibraryBook libraryBook =
+                bookOptional.orElse(new LibraryBook());
+
+        Book book = new Book();
+        book.setBookId(libraryBook.getBookId());
+        book.setTitle(libraryBook.getTitle());
+        book.setAuthorName(libraryBook.getAuthorName());
+        book.setYearPublished(libraryBook.getYearPublished());
+        book.setQuantity(libraryBook.getQuantity());
+
+        List<BookIsbnDTO> bookIsbnDTOS =
+                libraryBook.getBookIsbns().stream().map(b -> {
+                    BookIsbnDTO bdo = new BookIsbnDTO();
+                    bdo.setIsbn(b.getIsbn());
+                    bdo.setBookId(b.getBookId());
+                    return bdo;
+                }).collect(Collectors.toList());
+
+        /*BookIsbnDTO bookIsbnDTO = new BookIsbnDTO();
+        bookIsbnDTO.setBookIsbn(libraryBook.getBookIsbn().getIsbn());
+        bookIsbnDTO.setBookId(libraryBook.getBookIsbn().getBookId());
+*/
+        book.setBookIsbns(bookIsbnDTOS);
+
+        return book;
+    }
+
+    public LibraryBook updateBook(LibraryBook LibraryBook) {
+        //Integer bookId = LibraryBook.getBookId();
+        //bookMap.put(bookId, book);
+        return bookRepository.save(LibraryBook);
     }
 
     public void deleteBook(Integer bookId) {
         bookRepository.deleteById(bookId);
-    }
-
-    public Book createBook(Book book) {
-
-        Integer bookId = new Random().nextInt();
-        book.setBookId(bookId);
-        return bookRepository.save(book);
-    }
-
-    public Book getBook(Integer bookId) {
-        Optional<Book> bookOptional = bookRepository.findById(bookId);
-        return bookOptional.orElse(new Book());
     }
 }

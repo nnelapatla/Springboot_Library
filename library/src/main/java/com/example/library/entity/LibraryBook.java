@@ -1,16 +1,14 @@
 package com.example.library.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.*;
+import jakarta.persistence.*;
+import lombok.Data;
+
+import java.util.List;
 
 @Table(name="book")
 @Entity
 @Data
-public class Book{
-
+public class LibraryBook {
     @Id
     @Column(name="book_id")
     private Integer bookId;
@@ -19,11 +17,14 @@ public class Book{
     private String title;
 
     @Column(name="author_name")
-    private String author;
+    private String authorName;
 
     @Column(name="year_published")
-    private Integer year_published;
+    private Integer yearPublished;
 
     @Column(name="quantity")
     private Integer quantity;
+
+    @OneToMany(mappedBy = "libraryBook")
+    private List<BookIsbn> bookIsbns;
 }

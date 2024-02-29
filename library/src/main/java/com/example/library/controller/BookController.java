@@ -1,37 +1,39 @@
 package com.example.library.controller;
-import com.example.library.entity.Book;
+
+
+import com.example.library.entity.LibraryBook;
+//import com.example.library.model.Book;
+import com.example.library.model.Book;
 import com.example.library.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
 
 @RestController
-@RequestMapping("/books")
+@RequestMapping("/book")
 public class BookController {
-
     @Autowired
     private BookService bookService;
-  /*  @GetMapping
-    public List<Book> getAllBooks() {
-        return bookService.getAllBooks();
-    }*/
 
-    @GetMapping("/{bookId}")
-    public Book getBookById(@PathVariable Integer bookId) {
+    @GetMapping
+    public Book getBook(Integer bookId){
+
         return bookService.getBook(bookId);
     }
 
+    // create a book
     @PostMapping
-    public Book createBook(@RequestBody Book book) {
+    public LibraryBook createBook(@RequestBody LibraryBook book){
         return bookService.createBook(book);
     }
 
-    @PutMapping("/{bookId}")
-    public Book updateBook(@PathVariable Integer bookId, @RequestBody Book updatedBook) {
-        return bookService.updateBook(bookId, updatedBook);
+    @PutMapping
+    public LibraryBook updateBook(@RequestBody LibraryBook LibraryBook){
+        // Set the memberId for the member object to be updated
+        return bookService.updateBook(LibraryBook);
     }
-    @DeleteMapping("/{bookId}")
-    public void deleteBook(@PathVariable Integer bookId) {
+
+    @DeleteMapping
+    public void deleteBook(Integer bookId){
         bookService.deleteBook(bookId);
     }
 }

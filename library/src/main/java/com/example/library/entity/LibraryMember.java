@@ -1,10 +1,9 @@
 package com.example.library.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 @Table(name="library_member")
 @Entity
@@ -30,11 +29,33 @@ public class LibraryMember {
     @Column(name="membership_level")
     private String memberShipLevel;
 
-    @Column(name="address_id")
+    @Column(name = "address_id", insertable = false, updatable = false)
     private Long addressId;
+
+    @ManyToOne
+    @JoinColumn(name="address_id")
+    private Address address;
+
+    @OneToMany(mappedBy = "libraryMember")
+    private List<Checkout> checkouts;
 
     // lombok
 
 
 
 }
+
+
+// xml for mapping , connection details
+// url , username, password and driver name
+
+// mapping, dependencies, connection properties
+// JPA REPOSITORIES
+// autowire and use it in service layer
+
+
+
+
+// query, execute
+// EntityManager, EntityManagerFactory -
+// execute, executeUpdate , list,}

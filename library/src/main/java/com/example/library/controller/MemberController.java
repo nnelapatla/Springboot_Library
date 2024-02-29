@@ -1,5 +1,8 @@
 package com.example.library.controller;
+
 import com.example.library.entity.LibraryMember;
+//import com.cis.batch33.library.model.Member;
+import com.example.library.model.Member;
 import com.example.library.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -7,31 +10,29 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/member")
 public class MemberController {
-
     @Autowired
     private MemberService memberService;
 
-    // Get a member by memberId
-    @GetMapping("/{memberId}")
-    public LibraryMember getMember(@PathVariable Integer memberId) {
+    @GetMapping
+    public Member getMember(Integer memberId){
+
         return memberService.getMember(memberId);
     }
 
-    // Create a member
+    // create a member
     @PostMapping
-    public LibraryMember createMember(@RequestBody LibraryMember member) {
+    public LibraryMember createMember(@RequestBody  LibraryMember member){
         return memberService.createMember(member);
     }
 
-    // Update a member
-    @PutMapping("/{memberId}")
-    public LibraryMember updateMember(@PathVariable Integer memberId, @RequestBody LibraryMember updatedMember) {
-        return memberService.updateMember(memberId, updatedMember);
+    @PutMapping
+    public LibraryMember updateMember(@RequestBody LibraryMember LibraryMember){
+        // Set the memberId for the member object to be updated
+        return memberService.updateMember(LibraryMember);
     }
 
-    // Delete a member by memberId
-    @DeleteMapping("/{memberId}")
-    public void deleteMember(@PathVariable Integer memberId) {
+    @DeleteMapping
+    public void deleteMember(Integer memberId){
         memberService.deleteMember(memberId);
     }
 }

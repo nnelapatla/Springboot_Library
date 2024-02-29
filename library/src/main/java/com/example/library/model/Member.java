@@ -1,7 +1,20 @@
 package com.example.library.model;
-public class Member {
 
+import lombok.Data;
+
+import java.util.List;
+
+@Data
+public class Member {
     private Integer memberId;
+    private String firstName;
+    private String lastName;
+    private String emailAddress;
+    private Long phoneNumber;
+    private String memberShipLevel;
+    private AddressDTO address;
+    private List<CheckoutDTO> checkouts;
+    /*private Integer memberId;
     private String firstName;
     private String lastName;
     private String emailAddress;
@@ -45,7 +58,5 @@ public class Member {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
-    }
-
-
+    }*/
 }
